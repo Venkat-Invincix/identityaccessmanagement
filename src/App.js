@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import Dashboard from "./dashboard";
+import LoginPage from "./loginpage";
+// import SignUpPage from "./signuppage";
 function App() {
+
+  const [user, setUser] = React.useState(JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : {})
+
+  // const handle
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" >
+      {user.acessToken ? <Dashboard user={user} /> : <LoginPage />}
+
+      {/* <SignUpPage /> */}
+      {/*  */}
     </div>
   );
 }
