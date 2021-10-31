@@ -1,10 +1,14 @@
 import axios from 'axios'
 import React from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import './login.css'
+
 function LoginPage(props) {
 
-    const [userId, setUserId] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const { handleChangeUser } = props
+
+    const [userId, setUserId] = React.useState('Paresh123')
+    const [password, setPassword] = React.useState('12121212')
     const [formErrors, setFormErrors] = React.useState({})
     const [message, setMessage] = React.useState('')
     const error = {}
@@ -28,6 +32,8 @@ function LoginPage(props) {
         }
     }
 
+    const history = useHistory()
+
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = {
@@ -43,15 +49,17 @@ function LoginPage(props) {
                 .then((res) => {
                     const data = res.data
                     if (data) {
-                        setMessage(data.message)
-                        localStorage.setItem('user', JSON.stringify(data))
-                        console.log(data)
+                        handleChangeUser(data)
+                        history.push('/dashboard')
                         setUserId('')
                         setPassword('')
                     }
                 })
                 .catch((err) => {
-                    console.log(err.message)
+                    if (err) {
+                        console.log(err)
+                        setMessage('user id & password can not match.')
+                    }
                 })
         } else {
             setFormErrors(error)
@@ -84,7 +92,7 @@ function LoginPage(props) {
                     <button>login</button>
                     <p className="message">
                         Not registered?
-                        <a href="/">Create an account</a>
+                        <Link to="/signup">Create an account</Link>
                     </p>
                 </form>
             </div>

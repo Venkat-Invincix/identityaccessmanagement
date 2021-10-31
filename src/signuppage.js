@@ -1,6 +1,7 @@
 // import axios from 'axios'
 import axios from 'axios'
 import React from 'react'
+import { useHistory } from 'react-router'
 import './signup.css'
 function SignUpPage() {
 
@@ -46,6 +47,7 @@ function SignUpPage() {
         }
     }
 
+    const history = useHistory()
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -85,6 +87,7 @@ function SignUpPage() {
                         setUserId('')
                         setUserName('')
                         setPassword('')
+                        history.push('/')
                     }
                 })
                 .catch((err) => {
