@@ -4,13 +4,15 @@ import { Link, useHistory } from 'react-router-dom'
 import './login.css'
 
 function LoginPage(props) {
-
+    // we can access the  handleChangeUser using object destructuring
     const { handleChangeUser } = props
 
     const [userId, setUserId] = React.useState('Paresh123')
     const [password, setPassword] = React.useState('12121212')
     const [formErrors, setFormErrors] = React.useState({})
     const [message, setMessage] = React.useState('')
+
+    // error object to holds form error
     const error = {}
 
     const handleChangeUserId = (e) => {
@@ -31,7 +33,7 @@ function LoginPage(props) {
             error.password = 'password can not be empty'
         }
     }
-
+    // The useHistory hook gives you access to the history instance that you may use to navigate.
     const history = useHistory()
 
     const handleSubmit = (e) => {
@@ -41,6 +43,7 @@ function LoginPage(props) {
             password: password
         }
 
+        // it is called to validate the form data
         handleValidate()
 
         if (Object.keys(error).length === 0) {
@@ -57,7 +60,6 @@ function LoginPage(props) {
                 })
                 .catch((err) => {
                     if (err) {
-                        console.log(err)
                         setMessage('user id & password can not match.')
                     }
                 })
@@ -75,13 +77,13 @@ function LoginPage(props) {
                 </div>
                 <p style={{ color: "green" }}>{message ? message : ""}</p>
                 <form
-                    className="login-form"
-                    onSubmit={handleSubmit}>
+                    className="login-form">
                     <input
                         type="text"
                         placeholder="username"
                         value={userId}
                         onChange={handleChangeUserId} />
+                    {/* if we have a form error then it will show */}
                     {formErrors.userId && <span style={{ color: 'red' }}>{formErrors.userId}</span>}
                     <input
                         type="password"
@@ -89,7 +91,7 @@ function LoginPage(props) {
                         value={password}
                         onChange={handleChangePassword} />
                     {formErrors.password && <span style={{ color: 'red' }}>{formErrors.password}</span>}
-                    <button>login</button>
+                    <button onClick={handleSubmit}>login</button>
                     <p className="message">
                         Not registered?
                         <Link to="/signup">Create an account</Link>

@@ -1,8 +1,8 @@
-// import axios from 'axios'
 import axios from 'axios'
 import React from 'react'
 import { useHistory } from 'react-router'
 import './signup.css'
+
 function SignUpPage() {
 
     const [userName, setUserName] = React.useState('')
@@ -13,6 +13,7 @@ function SignUpPage() {
     const [message, setMessage] = React.useState('')
     const [formErrors, setFormErrors] = React.useState({})
 
+    // error object is used for holding field error
     const error = {}
 
     const handleChangeUserName = (e) => {
@@ -49,6 +50,7 @@ function SignUpPage() {
 
     const history = useHistory()
 
+    // form submit function call after clicking the submit button
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = {
@@ -57,26 +59,11 @@ function SignUpPage() {
             userId: userId,
             isAdmin: isAdmin
         }
+
+        // it is called for validating form
         handleValidate()
-        // fetch('https://iam-cisco.herokuapp.com/api/register', {
-        //     method: 'POST',
-        //     body: JSON.stringify(formData),
-        //     headers: {
-        //         "Access-Control-Allow-Origin": "*",
-        //         "Content-Type": "application/json"
-        //     },
-        // })
-        //     .then((res) => {
-        //         const resMessage = res.message
-        //         if (resMessage) {
-        //             setMessage(resMessage)
-        //         } else {
-        //             setMessage('')
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log(err.message)
-        //     })
+
+        // if form has no error then it will be doing an axios call to sign up
         if (Object.keys(error).length === 0) {
             setFormErrors({})
             axios.post('https://iam-cisco.herokuapp.com/api/register', formData)
@@ -88,6 +75,7 @@ function SignUpPage() {
                         setUserName('')
                         setPassword('')
                         history.push('/')
+                        // after successful data insert it will redirect to login page 
                     }
                 })
                 .catch((err) => {
@@ -96,7 +84,6 @@ function SignUpPage() {
         } else {
             setFormErrors(error)
         }
-
     }
 
     return (
@@ -107,6 +94,7 @@ function SignUpPage() {
                         <h3>SIGNUP</h3>
                     </div>
                 </div>
+                {/* if message is present then it will shows the message  */}
                 <p style={{ color: "green" }}>{message ? message : ""}</p>
                 <form
                     className="signup-form"
@@ -116,6 +104,7 @@ function SignUpPage() {
                         placeholder="username"
                         value={userName}
                         onChange={handleChangeUserName} />
+                    {/* if the form holds error it will render . && is used for conditional rendering*/}
                     {formErrors.userName && <span style={{ color: 'red' }}>{formErrors.userName}</span>}
                     <input
                         type="password"

@@ -1,11 +1,12 @@
 import axios from 'axios'
 import React from 'react'
 import { Link } from 'react-router-dom'
+// link is used as an <a> tag in html 
 import './dashboard.css'
 
 const Dashboard = (props) => {
 
-    const { user, handleChangeUser } = props
+    const { handleChangeUser, user } = props
 
     const [acc1, setAcc1] = React.useState(false)
     const [acc2, setAcc2] = React.useState(false)
@@ -15,6 +16,18 @@ const Dashboard = (props) => {
     const [routerData, setRouterData] = React.useState({})
     const [cameraData, setCameraData] = React.useState({})
 
+    const [message, setMessage] = React.useState('')
+
+    // props.history.push() is used for redirect to another url - (if user is not there then redirect to login screen)
+    React.useEffect(() => {
+        if (Object.keys(user).length === 0) {
+            props.history.push('/')
+        }
+    }, [user, props.history]);
+
+    // call back for front gate accordion 
+    // for fetching data we are using axios
+    // if status is 200 then we can open the accosrion
     const handleChangeFrontgate = () => {
         if (Object.keys(mainGateData).length === 0) {
             axios.get('https://iam-cisco.herokuapp.com/api/acessMainGate', {
@@ -25,17 +38,20 @@ const Dashboard = (props) => {
                 .then((res) => {
                     if (res.status === 200) {
                         setAcc1(!acc1)
+                        setMessage('')
                         setMainGateData(res.data)
                     }
                 })
                 .catch((err) => {
-                    alert(err.message)
+                    setMessage(`you can not acess`)
                 })
         } else {
             setAcc1(!acc1)
+            setMessage('')
         }
     }
 
+    // call back for router accordion 
     const handleChangeRouter = () => {
         if (Object.keys(routerData).length === 0) {
             axios.get('https://iam-cisco.herokuapp.com/api/accessRouter', {
@@ -46,20 +62,22 @@ const Dashboard = (props) => {
                 .then((res) => {
                     if (res.status === 200) {
                         setAcc2(!acc2)
+                        setMessage('')
                         setRouterData(res.data)
                     }
                 })
                 .catch((err) => {
-                    // alert(err.message)
                     if (err) {
-                        alert(`you can not acess`)
+                        setMessage(`you can not acess`)
                     }
                 })
         } else {
             setAcc2(!acc2)
+            setMessage('')
         }
     }
 
+    // call back for camera accordion 
     const handleChangeCamera = () => {
         if (Object.keys(cameraData).length === 0) {
             axios.get('https://iam-cisco.herokuapp.com/api/accessCamera', {
@@ -69,18 +87,19 @@ const Dashboard = (props) => {
             })
                 .then((res) => {
                     if (res.status === 200) {
+                        setMessage('')
                         setAcc3(!acc3)
                         setCameraData(res.data)
                     }
                 })
                 .catch((err) => {
-                    // alert(err.message)
                     if (err) {
-                        alert(`you can not acess`)
+                        setMessage(`you can not acess`)
                     }
                 })
         } else {
             setAcc3(!acc3)
+            setMessage('')
         }
     }
 
@@ -90,6 +109,7 @@ const Dashboard = (props) => {
         props.history.push('/')
     }
 
+    // conditional styling when state update
     const acc1ClassName = acc1 ? "panelopen" : "panel"
     const acc1Active = acc1 ? "active" : ""
 
@@ -99,19 +119,11 @@ const Dashboard = (props) => {
     const acc3ClassName = acc3 ? "panelopen" : "panel"
     const acc3Active = acc3 ? "active" : ""
 
-
-    React.useEffect(() => {
-        if (Object.keys(user).length === 0) {
-            props.history.push('/')
-        }
-    }, [user])
-
     return (
         <div>
             <ul>
                 <li>
                     <Link to="/dashboard">Dashboard</Link>
-                    {/* <a href="/">Dashboard</a> */}
                 </li>
                 <li style={{ float: 'right' }}>
                     <a
@@ -127,7 +139,7 @@ const Dashboard = (props) => {
             <h2 style={{ color: 'indigo', float: 'left', margin: '20px' }}>
                 Hello , Welcome
             </h2>
-
+            <p style={{ color: 'red', marginTop: 25 }}>{message && message}</p>
 
             <div className="content">
 
@@ -152,6 +164,7 @@ const Dashboard = (props) => {
                     <p>Last Reboot - {routerData.lastReboot}</p>
                     <p>Connected Ips</p>
                     <ul className="connected__ip">
+                        {/* if  routerData.cnnectedIps  data is present then it will map the data*/}
                         {
                             routerData.cnnectedIps &&
                             routerData.cnnectedIps.map((ip, index) => {
