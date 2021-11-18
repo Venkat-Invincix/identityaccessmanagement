@@ -1,10 +1,13 @@
 import axios from 'axios'
 import React from 'react'
 import { useHistory } from 'react-router'
+// useHistory is a component of react-router
 import './signup.css'
 
 function SignUpPage() {
 
+    // useState is used for manage state in react
+    // [stateName, updaterFunction] = React.useState()
     const [userName, setUserName] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [userId, setUserId] = React.useState('')
@@ -16,26 +19,31 @@ function SignUpPage() {
     // error object is used for holding field error
     const error = {}
 
+    // onChange of username input handleChangeUserName() function get called
     const handleChangeUserName = (e) => {
         const data = e.target.value;
         setUserName(data)
     }
 
+    // onChange of password input handleChangePassword() function get called
     const handleChangePassword = (e) => {
         const data = e.target.value;
         setPassword(data)
     }
 
+    // onChange of userId input handleChangeUserId() function get called
     const handleChangeUserId = (e) => {
         const data = e.target.value;
         setUserId(data)
     }
 
+    // onChange of admin input handleChangeIsAdmin() function get called
     const handleChangeIsAdmin = (e) => {
         const data = e.target.checked;
         setIsAdmin(data)
     }
 
+    // this function will called after submit button
     const handleValidate = () => {
         if (userName.length === 0) {
             error.userName = 'user name can not be empty'
@@ -105,18 +113,21 @@ function SignUpPage() {
                         value={userName}
                         onChange={handleChangeUserName} />
                     {/* if the form holds error it will render . && is used for conditional rendering*/}
+                    {/* if formErrors of userName is there then userName form error shows*/}
                     {formErrors.userName && <span style={{ color: 'red' }}>{formErrors.userName}</span>}
                     <input
                         type="password"
                         placeholder="password"
                         value={password}
                         onChange={handleChangePassword} />
+                    {/* if formErrors of password is there then password form error shows*/}
                     {formErrors.password && <span style={{ color: 'red' }}>{formErrors.password}</span>}
                     <input
                         type="text"
                         placeholder="user id"
                         value={userId}
                         onChange={handleChangeUserId} />
+                    {/* if formErrors of userId is there then password form error shows*/}
                     {formErrors.userId && <span style={{ color: 'red' }}>{formErrors.userId}</span>}
                     <div className="signup__checkbox">
                         <input
